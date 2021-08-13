@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{% static 'titel_Icon.png' %}" type="image/png"/>
 
     <title>Tech Note | {{ user.get_full_name }} </title>
 
@@ -13,10 +14,10 @@
 </head>
 <body>
 
-<nav class="navbar is-dark">
+<nav class="navbar is-white has-shadow">
     <div class="navbar-brand">
         <a href="" class="navbar-item">
-            <img src="{% static 'logo-demo.jpg' %}" alt="Logo">
+            <img src="{% static 'g18.png' %}" alt="Logo" style=" max-height: 60px">
         </a>
         <a class="navbar-burger" id="burger">
             <span></span>
@@ -64,7 +65,7 @@
             <nav class="panel">
                 <p class="panel-heading">
                     Notes
-                    <a class="button is-link is-outlined is-small">
+                    <a class="button is-link is-outlined is-small ml-3">
                         <span class="icon ">
                           <i class="fas fa-plus"></i>
                         </span>
@@ -115,15 +116,14 @@
                 </div>
             </nav>
         </div>
-        <div class="column is-8">
+        <div class="box column is-8">
             <form method="post" action="">
                 {% csrf_token %}
 
                 {#                <input type="hidden" name="docid" value="{{ docid }}">#}
 
-                <div class="field">
-                    <label class="label">
-                        Title
+                <div class="field ">
+                    <label class="label panel-heading">
 
                         {#                        {% if document %}#}
                         <span class="has-text-grey-light">
@@ -135,7 +135,7 @@
                     </label>
 
                     <div class="control">
-                        <input type="text" class="input" name="title" placeholder="Title"{% if document %}
+                        <input type="text" class="input is-link" name="title" placeholder="Title"{% if document %}
                                value="{{ document.title }}"{% endif %}>
                     </div>
                 </div>
@@ -144,7 +144,7 @@
                     <label class="label">Content</label>
 
                     <div class="control">
-                        <textarea class="textarea" name="content" placeholder="Content">
+                        <textarea class="textarea is-link" name="content" placeholder="Content">
 {#                            {% if document %}#}
 {#                            {{ document.content }}{% endif %}#}
                         </textarea>
