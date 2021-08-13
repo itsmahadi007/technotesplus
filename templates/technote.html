@@ -8,9 +8,175 @@
     <title>Tech Note | {{ user.get_full_name }} </title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 
 </head>
 <body>
-Hello World
+
+<nav class="navbar is-dark">
+    <div class="navbar-brand">
+        <a href="" class="navbar-item">
+            <img src="{% static 'logo-demo.jpg' %}" alt="Logo">
+        </a>
+        <a class="navbar-burger" id="burger">
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </a>
+    </div>
+    <div class="navbar-menu" id="nav-links">
+        <div class="navbar-end">
+            <a href="" class="navbar-item">Home</a>
+            {#            <a href="" class="navbar-item">Other's Notes</a>#}
+            <a href="" class="navbar-item">Account</a>
+            <a href="{% url 'log_out' %}" class="navbar-item has-text-danger">Log Out</a>
+            {% comment %}<div class="field has-addons navbar-item">
+                <div class="control">
+                    <input class="input" type="text" placeholder="Search Note">
+                </div>
+                <div class="control">
+                    <a class="button is-info">
+                        Search
+                    </a>
+                </div>
+            </div>{% endcomment %}
+        </div>
+    </div>
+
+</nav>
+
+<section class="section">
+    <div class="columns">
+        <div class="column is-4">
+            {% comment %}<aside class="menu">
+                <p class="menu-label">
+                    Note Title
+
+                </p>
+                <ul class="menu-list">
+                    <li>
+                        <a href="">note</a>
+                    </li>
+                </ul>
+
+            </aside>{% endcomment %}
+            <nav class="panel">
+                <p class="panel-heading">
+                    Notes
+                    <a class="button is-link is-outlined is-small">
+                        <span class="icon ">
+                          <i class="fas fa-plus"></i>
+                        </span>
+                        <span>Add New</span>
+                    </a>
+                </p>
+                <div class="panel-block">
+                    <p class="control has-icons-left">
+                        <input class="input" type="text" placeholder="Search">
+                        <span class="icon is-left">
+                          <i class="fas fa-search" aria-hidden="true"></i>
+                         </span>
+                    </p>
+                </div>
+                <p class="panel-tabs">
+                    <a class="is-active">My Notes</a>
+                    <a>Shared With Me</a>
+                    <a>Shared By me</a>
+                </p>
+                <a class="panel-block is-active">
+                    <span class="panel-icon">
+                      <i class="fas fa-book" aria-hidden="true"></i>
+                    </span>
+                    bulma
+                </a>
+                <a class="panel-block">
+                    <span class="panel-icon">
+                      <i class="fas fa-book" aria-hidden="true"></i>
+                    </span>
+                    marksheet
+                </a>
+                <a class="panel-block">
+                    <span class="panel-icon">
+                      <i class="fas fa-book" aria-hidden="true"></i>
+                    </span>
+                    minireset.css
+                </a>
+                <a class="panel-block">
+                    <span class="panel-icon">
+                      <i class="fas fa-book" aria-hidden="true"></i>
+                    </span>
+                    jgthms.github.io
+                </a>
+                <div class="panel-block">
+                    <button class="button is-link is-outlined is-fullwidth">
+                        Reset all filters
+                    </button>
+                </div>
+            </nav>
+        </div>
+        <div class="column is-8">
+            <form method="post" action="">
+                {% csrf_token %}
+
+                {#                <input type="hidden" name="docid" value="{{ docid }}">#}
+
+                <div class="field">
+                    <label class="label">
+                        Title
+
+                        {#                        {% if document %}#}
+                        <span class="has-text-grey-light">
+                                        Created at: {{ document.created_at|date:"m/d Y" }} /
+                                        Modified at: {{ document.modified_at|date:"m/d Y" }}
+                        </span>
+
+                        {#                        {% endif %}#}
+                    </label>
+
+                    <div class="control">
+                        <input type="text" class="input" name="title" placeholder="Title"{% if document %}
+                               value="{{ document.title }}"{% endif %}>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Content</label>
+
+                    <div class="control">
+                        <textarea class="textarea" name="content" placeholder="Content">
+{#                            {% if document %}#}
+{#                            {{ document.content }}{% endif %}#}
+                        </textarea>
+                    </div>
+                </div>
+
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-primary is-light">Save</button>
+                    </div>
+                    {#                    {% if document %}#}
+                    <div class="control">
+                        <a href="" class="button is-danger is-light">Delete</a>
+                    </div>
+                    <div class="control">
+                        <button class="button is-link is-light ">Share</button>
+
+                    </div>
+                    {#                    {% endif %}#}
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    const burgerIcon = document.querySelector('#burger');
+    const navberMenu = document.querySelector('#nav-links');
+
+    burgerIcon.addEventListener('click', () => {
+        navberMenu.classList.toggle('is-active');
+    });
+</script>
 </body>
 </html>

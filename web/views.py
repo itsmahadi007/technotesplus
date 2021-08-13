@@ -1,7 +1,8 @@
 from django.contrib import auth, messages
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 
@@ -70,3 +71,9 @@ def do_register(request):
 @login_required(login_url='login_frm')
 def technote_frm(request):
     return render(request, 'technote.html')
+
+
+def log_out(request):
+    # messages.success(request, 'you have logged out')
+    logout(request)
+    return HttpResponseRedirect("/")

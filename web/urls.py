@@ -6,4 +6,5 @@ urlpatterns = [
     path('do_login', do_login, name="do_login"),
     path('do_register', do_register, name="do_register"),
     path('technote/', technote_frm, name='technote_frm'),
+    path('log_out', log_out, name='log_out'),
 ]
