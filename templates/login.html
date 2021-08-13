@@ -10,19 +10,20 @@
     ============================================= -->
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700|Raleway:300,400,500,600,700|Crete+Round:400i"
           rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" type="text/css"/>
-    <link rel="stylesheet" href="{% static 'style.css' %}" type="text/css"/>
-    <link rel="stylesheet" href="{% static 'css/dark.css' %}" type="text/css"/>
-    <link rel="stylesheet" href="{% static 'css/font-icons.css' %}" type="text/css"/>
-    <link rel="stylesheet" href="{% static 'css/animate.css' %}" type="text/css"/>
-    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'log_reg/css/bootstrap.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'log_reg/style.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'log_reg/css/dark.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'log_reg/css/font-icons.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'log_reg/css/animate.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'log_reg/css/magnific-popup.css' %}" type="text/css"/>
 
-    <link rel="stylesheet" href="{% static 'css/responsive.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'log_reg/css/responsive.css' %}" type="text/css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Login</title>
 
     <!-- Document Title
     ============================================= -->
-    <title>Login - Register {{ request.user.get_full_name }} </title>
+
 
     {% include 'messages.html' %}
 
@@ -72,30 +73,6 @@
                                        class="form-control" required/>
                             </div>
 
-                            <fieldset class="form-group">
-                                <div class="row">
-                                    <legend class="col-form-label col-sm-2 pt-0" style="font-weight: bold ">I am a
-                                    </legend>
-                                    <div class="col-sm-10">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="gridRadios"
-                                                   id="gridRadios1" value="1" >
-                                            <label class="form-check-label" for="gridRadios1">
-                                                Teacher
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="gridRadios"
-                                                   id="gridRadios2" value="2" checked>
-                                            <label class="form-check-label" for="gridRadios2">
-                                                Student
-                                            </label>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </fieldset>
-
                             <div class="col_full nobottommargin">
                                 <button class="button button-3d button-black nomargin" id="login-form-submit"
                                         name="login-form-submit" value="login">Login
@@ -126,7 +103,8 @@
 
                             <div class="col_full">
                                 <label for="register-form-email">Email Address:</label>
-                                <input type="email" id="register-form-email" name="register-form-email" value="itsmahadi@gmail.com"
+                                <input type="email" id="register-form-email" name="register-form-email"
+                                       value="itsmahadi@gmail.com"
                                        class="form-control" required/>
                             </div>
 
@@ -148,14 +126,6 @@
                                 <label for="register-form-repassword">Re-enter Password:</label>
                                 <input type="password" id="register-form-repassword" name="register-form-repassword"
                                        value="" class="form-control" required/>
-                            </div>
-
-                            <div class="form-group col-md-4">
-                                <label for="inputState">I am a</label>
-                                <select id="inputState" class="form-control" name="who">
-                                    <option selected>Teacher</option>
-                                    <option>Student</option>
-                                </select>
                             </div>
 
                             <div class="col_full nobottommargin">
@@ -182,12 +152,12 @@
 
 <!-- External JavaScripts
 ============================================= -->
-<script src="{% static 'js/jquery.js' %}"></script>
-<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'log_reg/js/jquery.js' %}"></script>
+<script src="{% static 'log_reg/js/plugins.js' %}"></script>
 
 <!-- Footer Scripts
 ============================================= -->
-<script src="{% static 'js/functions.js' %}"></script>
+<script src="{% static 'log_reg/js/functions.js' %}"></script>
 
 </body>
 </html>
