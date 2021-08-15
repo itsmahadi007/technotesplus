@@ -38,4 +38,22 @@ del.addEventListener('click', () => {
     model.classList.remove('is-active');
 });
 
+// const search_text = document.querySelector('#search_text');
+// $("#search_button").click(function () {
+//     let serialization = $('#search_form').serialize();
+//     console.log(serialization)
+//     console.log(search_text.value)
+//
+//     $.ajax({
+//         url: '/technote/' + search_text.value,
+//         type: 'get',
+//         success: function (response) {
+//             console.log('searched_note')
+//         }
+//     })
+// });
+
+
+
+
 

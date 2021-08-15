@@ -36,8 +36,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'web.apps.WebConfig'
+    'web.apps.WebConfig',
+    'crispy_forms',
 ]
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -142,3 +144,5 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'Great',
     # 50: 'critical',
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

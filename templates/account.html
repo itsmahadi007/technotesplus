@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{% static 'titel_Icon.png' %}" type="image/png"/>
+
+    <title> {{ user.get_full_name }} | Tech Note </title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    {% include 'messages.html' %}
+</head>
+<body>
+
+{% include 'nav/nav.html' %}
+
+<section class="section">
+    <div class="panel box">
+
+        <form method="post" action="{% url 'account_update' %}">
+            {% csrf_token %}
+            <div class="field">
+                <label class="label">First Name</label>
+                <div class="control">
+                    <input class="input is-link" type="text" name="form-firstname" placeholder="First Name"
+                           value="{{ data.first_name }}">
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Last Name</label>
+                <div class="control">
+                    <input class="input is-link " type="text" name="form-lastname" placeholder="Last Name"
+                           value="{{ data.last_name }}">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Username</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input is-link" type="text" name="form-username" placeholder="Username"
+                           value="{{ data.username }}">
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-user"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Email</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input is-link" type="email" name="form-email" placeholder="Email input"
+                           value="{{ data.email }}">
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-envelope"></i>
+                    </span>
+
+                </div>
+            </div>
+            <div class="field is-grouped">
+                <div class="columns is-mobile ">
+                    <div class="column control ">
+                        <button class="button is-link">Submit</button>
+                    </div>
+                    <div class="column control ">
+                        <a href="{% url 'account_frm' %}" class="button is-link">Cancel</a>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+        <div class="control mt-2 ml-3 ">
+            <a href="{% url 'passwordChangeView' %}" class="button is-link is-light">Change Password</a>
+
+        </div>
+    </div>
+    <div class="modal " id="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Change Password</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <!-- Content ... -->
+
+            </section>
+            <footer class="modal-card-foot">
+                {#            <button class="button is-success">Save changes</button>#}
+                {#            <button class="button">Cancel</button>#}
+            </footer>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    const burgerIcon = document.querySelector('#burger');
+    const navberMenu = document.querySelector('#nav-links');
+
+    burgerIcon.addEventListener('click', () => {
+        navberMenu.classList.toggle('is-active');
+    });
+</script>
+
+</body>
+</html>

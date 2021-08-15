@@ -5,8 +5,10 @@ from django.contrib import auth, messages
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.auth.views import PasswordChangeView, PasswordResetDoneView
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views import View
 from django.forms.models import model_to_dict
 from django.views.generic import ListView
@@ -14,6 +16,15 @@ import json
 
 # Create your views here.
 from web.models import Notes, SharedNotes
+
+
+class MypasswordChangeView(PasswordChangeView):
+    template_name = 'user/password-change.html'
+    success_url = reverse_lazy('passwordResetDoneView')
+
+
+class MypasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'user/password-reset-done.html'
 
 
 def login_frm(requests):
@@ -34,7 +45,7 @@ def do_login(request):
 
         else:
 
-            messages.error(request, 'Invalid login credentials 007')
+            messages.error(request, 'Invalid login credentials')
             return redirect('login_frm')
     messages.error(request, 'Something is Wrong, Please try again later')
     return redirect('login_frm')
@@ -186,7 +197,9 @@ def get_notes_shared_by_me(request, note_id):
 def get_notes_shared_with_me(request, note_id):
     if SharedNotes.objects.filter(view_permit__username=request.user.username).exists():
         obj = SharedNotes.objects.get(view_permit__username=request.user.username, note_id=note_id)
-
+        if not obj.seen:
+            obj.seen = True
+            obj.save()
         shared_with_me_obj = SharedNotes.objects.filter(view_permit__username=request.user.username)
 
         # shared_with_me_obj = SharedNotes.objects.filter(view_permit__username=request.user.username)
@@ -256,7 +269,91 @@ def technote_by_me_frm(request):
     return render(request, 'technote_by_me.html', data)
 
 
+@login_required(login_url='login_frm')
+def account_frm(request):
+    obj = User.objects.get(username=request.user.username)
+    data = {
+        'data': obj
+    }
+    return render(request, 'account.html', data)
+
+
+@login_required(login_url='login_frm')
+def account_update(request):
+    if request.method == 'POST':
+        obj = User.objects.get(username=request.user.username)
+        firstname = request.POST['form-firstname']
+        lastname = request.POST['form-lastname']
+        email = request.POST['form-email']
+        username = request.POST['form-username']
+
+        if User.objects.filter(username=username).exists() and obj.username != username:
+            messages.error(request, 'This username is already used')
+            return redirect('account_frm')
+
+        if User.objects.filter(email=email).exists() and obj.email != email:
+            messages.error(request, 'This email is already registered')
+            return redirect('account_frm')
+
+        try:
+            obj.first_name = firstname
+            obj.last_name = lastname
+            obj.username = username
+            obj.email = email
+            obj.save()
+            messages.success(request, 'Successfully updated as ' + request.POST['form-username'])
+            # messages.success(request, user.user_type)
+            return redirect('technote_frm')
+        except Exception as e:
+            messages.error(request, e)
+            return redirect('login_frm')
+
+    return None
+
+
 def log_out(request):
     # messages.success(request, 'you have logged out')
     logout(request)
     return HttpResponseRedirect("/")
+
+
+from django.shortcuts import render, redirect
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.models import User
+from django.template.loader import render_to_string
+from django.db.models.query_utils import Q
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
+
+
+def password_reset_request(request):
+    if request.method == "POST":
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            associated_users = User.objects.filter(Q(email=data))
+            if associated_users.exists():
+                for user in associated_users:
+                    subject = "Password Reset Requested"
+                    email_template_name = "PASS/password_reset_email.txt"
+                    c = {
+                        "email": user.email,
+                        'domain': '127.0.0.1:8000',
+                        'site_name': 'Website',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    email = render_to_string(email_template_name, c)
+                    try:
+                        send_mail(subject, email, 'admin@example.com', [user.email], fail_silently=False)
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    return redirect("/password_reset/done/")
+    password_reset_form = PasswordResetForm()
+    return render(request=request, template_name="PASS/password_reset.html",
+                  context={"password_reset_form": password_reset_form})
