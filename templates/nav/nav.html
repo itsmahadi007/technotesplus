@@ -1,0 +1,25 @@
+{% load static %}
+<nav class="navbar is-white has-shadow">
+    <div class="navbar-brand">
+        <a href="{% url 'technote_frm' %}" class="navbar-item">
+            <img src="{% static 'g18.png' %}" alt="Logo" style=" max-height: 60px">
+        </a>
+        <a class="navbar-burger" id="burger">
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </a>
+    </div>
+    <div class="navbar-menu" id="nav-links">
+        <div class="navbar-end">
+            <a href="{% url 'technote_frm' %}" class="navbar-item">My Notes </a>
+            <a href="{% url 'technote_with_me_frm' %}" class="navbar-item">Shared With Me</a>
+            <a href="{% url 'technote_by_me_frm' %}" class="navbar-item">Shared By Me</a>
+            <a href="" class="navbar-item">Accounts</a>
+            <a href="{% url 'log_out' %}" class="navbar-item has-text-danger">Log Out</a>
+
+        </div>
+    </div>
+
+</nav>

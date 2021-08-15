@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{% static 'titel_Icon.png' %}" type="image/png"/>
+
+    <title> {{ user.get_full_name }} | Tech Note </title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+</head>
+<body>
+
+{% include 'nav/nav.html' %}
+
+<section class="section">
+    <div class="columns">
+        <div class="column is-4">
+            <nav class="panel">
+                <p class="panel-heading">
+                    My Shared Notes
+                </p>
+                {% for i in my_note %}
+                    <a href="{% url 'get_notes_shared_by_me' i.pk %}" class="panel-block">
+                    <span class="panel-icon">
+                      <i class="fas fa-book" aria-hidden="true"></i>
+                    </span>
+                        {{ i.note.title }}
+                    </a>
+                {% endfor %}
+
+            </nav>
+        </div>
+        <div class="box column is-8">
+            <form method="post" action="">
+                {% csrf_token %}
+
+                {#                <input type="hidden" name="docid" value="{{ docid }}">#}
+
+                <div class="field ">
+                    <label class="label panel-heading">
+
+                        {% if first_obj %}
+                            <span class="tobe_clear has-text-grey-light" id="hide3">
+                                        Created at: {{ first_obj.created_at|date:"m/d Y" }} /
+                                        Modified at: {{ first_obj.modified_at|date:"m/d Y" }}
+                        </span>
+
+                        {% endif %}
+                    </label>
+
+                    <div class="control">
+                        <label>
+                            <input type="text" class="tobe_clear input is-link" name="title" placeholder="Title"
+                                    {% if first_obj %}
+                                   value="{{ first_obj.title }}"{% endif %}>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Content</label>
+
+                    <div class="control">
+                        <label>
+                            <textarea class="tobe_clear textarea is-link" name="content"
+                                      placeholder="Content">{% if first_obj %}
+                                {{ first_obj.content }}{% endif %}</textarea>
+                        </label>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    const burgerIcon = document.querySelector('#burger');
+    const navberMenu = document.querySelector('#nav-links');
+
+    burgerIcon.addEventListener('click', () => {
+        navberMenu.classList.toggle('is-active');
+    });
+</script>
+</body>
+</html>

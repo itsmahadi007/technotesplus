@@ -6,66 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{% static 'titel_Icon.png' %}" type="image/png"/>
 
-    <title>Tech Note | {{ user.get_full_name }} </title>
+    <title> {{ user.get_full_name }} | Tech Note </title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 
+    {% include 'messages.html' %}
 </head>
 <body>
 
-<nav class="navbar is-white has-shadow">
-    <div class="navbar-brand">
-        <a href="" class="navbar-item">
-            <img src="{% static 'g18.png' %}" alt="Logo" style=" max-height: 60px">
-        </a>
-        <a class="navbar-burger" id="burger">
-            <span></span>
-            <span></span>
-            <span></span>
-
-        </a>
-    </div>
-    <div class="navbar-menu" id="nav-links">
-        <div class="navbar-end">
-            <a href="" class="navbar-item">Home</a>
-            {#            <a href="" class="navbar-item">Other's Notes</a>#}
-            <a href="" class="navbar-item">Account</a>
-            <a href="{% url 'log_out' %}" class="navbar-item has-text-danger">Log Out</a>
-            {% comment %}<div class="field has-addons navbar-item">
-                <div class="control">
-                    <input class="input" type="text" placeholder="Search Note">
-                </div>
-                <div class="control">
-                    <a class="button is-info">
-                        Search
-                    </a>
-                </div>
-            </div>{% endcomment %}
-        </div>
-    </div>
-
-</nav>
+{% include 'nav/nav.html' %}
 
 <section class="section">
     <div class="columns">
         <div class="column is-4">
-            {% comment %}<aside class="menu">
-                <p class="menu-label">
-                    Note Title
-
-                </p>
-                <ul class="menu-list">
-                    <li>
-                        <a href="">note</a>
-                    </li>
-                </ul>
-
-            </aside>{% endcomment %}
             <nav class="panel">
                 <p class="panel-heading">
                     Notes
-                    <a class="button is-link is-outlined is-small ml-3">
+                    <a class="button is-link is-outlined is-small ml-3" id="add_new">
                         <span class="icon ">
                           <i class="fas fa-plus"></i>
                         </span>
@@ -73,70 +31,73 @@
                     </a>
                 </p>
                 <div class="panel-block">
-                    <p class="control has-icons-left">
-                        <input class="input" type="text" placeholder="Search">
-                        <span class="icon is-left">
-                          <i class="fas fa-search" aria-hidden="true"></i>
-                         </span>
-                    </p>
+                    <form class="" method="post" id="search_form" action="{% url 'search_notes' %}">
+                        {% csrf_token %}
+                        <div class="field has-addons has-addons-centered">
+                            <div class="control is-expanded">
+                                <label>
+                                    <input class="input" type="text" name="search_data" placeholder="Search Notes"
+                                           id="search_text">
+                                </label>
+                            </div>
+                            <div class="control">
+                                <button type="submit" class="button is-info" id="search_button">
+                                    Search
+                                </button>
+
+                            </div>
+                        </div>
+
+                    </form>
                 </div>
-                <p class="panel-tabs">
-                    <a class="is-active">My Notes</a>
-                    <a>Shared With Me</a>
-                    <a>Shared By me</a>
-                </p>
-                <a class="panel-block is-active">
+
+                {% for i in my_note %}
+
+                    <a href="{% url 'get_notes' i.pk %}" class="panel-block">
                     <span class="panel-icon">
                       <i class="fas fa-book" aria-hidden="true"></i>
                     </span>
-                    bulma
-                </a>
-                <a class="panel-block">
-                    <span class="panel-icon">
-                      <i class="fas fa-book" aria-hidden="true"></i>
-                    </span>
-                    marksheet
-                </a>
-                <a class="panel-block">
-                    <span class="panel-icon">
-                      <i class="fas fa-book" aria-hidden="true"></i>
-                    </span>
-                    minireset.css
-                </a>
-                <a class="panel-block">
-                    <span class="panel-icon">
-                      <i class="fas fa-book" aria-hidden="true"></i>
-                    </span>
-                    jgthms.github.io
-                </a>
-                <div class="panel-block">
-                    <button class="button is-link is-outlined is-fullwidth">
-                        Reset all filters
-                    </button>
-                </div>
+                        {{ i.title }}
+                    </a>
+                {% endfor %}
+                {% if filter_ed %}
+                    <div class="panel-block">
+                        <a href="{% url 'technote_frm' %}" class="button is-danger is-outlined is-fullwidth">
+                            Reset all filters
+                        </a>
+                    </div>
+                {% endif %}
+
+
             </nav>
         </div>
         <div class="box column is-8">
-            <form method="post" action="">
+            <form method="post" action="{% url 'post_notes' %}">
                 {% csrf_token %}
-
-                {#                <input type="hidden" name="docid" value="{{ docid }}">#}
+                {% if first_obj %}
+                    <input type="hidden" id="note_id" name="note_id" value="{{ first_obj.pk }}">
+                {% else %}
+                    <input type="hidden" id="note_id" name="note_id" value="null">
+                {% endif %}
 
                 <div class="field ">
                     <label class="label panel-heading">
 
-                        {#                        {% if document %}#}
-                        <span class="has-text-grey-light">
-                                        Created at: {{ document.created_at|date:"m/d Y" }} /
-                                        Modified at: {{ document.modified_at|date:"m/d Y" }}
+                        {% if first_obj %}
+                            <span class="tobe_clear has-text-grey-light" id="hide3">
+                                        Created at: {{ first_obj.created_at|date:"m/d Y" }} /
+                                        Modified at: {{ first_obj.modified_at|date:"m/d Y" }}
                         </span>
 
-                        {#                        {% endif %}#}
+                        {% endif %}
                     </label>
 
                     <div class="control">
-                        <input type="text" class="input is-link" name="title" placeholder="Title"{% if document %}
-                               value="{{ document.title }}"{% endif %}>
+                        <label>
+                            <input type="text" class="tobe_clear input is-link" name="title" placeholder="Title"
+                                    {% if first_obj %}
+                                   value="{{ first_obj.title }}"{% endif %}>
+                        </label>
                     </div>
                 </div>
 
@@ -144,10 +105,11 @@
                     <label class="label">Content</label>
 
                     <div class="control">
-                        <textarea class="textarea is-link" name="content" placeholder="Content">
-{#                            {% if document %}#}
-{#                            {{ document.content }}{% endif %}#}
-                        </textarea>
+                        <label>
+                            <textarea class="tobe_clear textarea is-link" name="content"
+                                      placeholder="Content">{% if first_obj %}
+                                {{ first_obj.content }}{% endif %}</textarea>
+                        </label>
                     </div>
                 </div>
 
@@ -155,28 +117,56 @@
                     <div class="control">
                         <button class="button is-primary is-light">Save</button>
                     </div>
-                    {#                    {% if document %}#}
-                    <div class="control">
-                        <a href="" class="button is-danger is-light">Delete</a>
-                    </div>
-                    <div class="control">
-                        <button class="button is-link is-light ">Share</button>
+                    {% if first_obj %}
+                        <div class="control">
+                            <a href="{% url 'delete_notes' first_obj.pk %}" class="button is-danger is-light"
+                               id="hide1">Delete</a>
+                        </div>
+                        <div class="control">
+                            <a class="button is-link is-light " id="hide2">Share</a>
 
-                    </div>
-                    {#                    {% endif %}#}
+                        </div>
+
+                    {% endif %}
                 </div>
             </form>
         </div>
     </div>
 </section>
 
-<script>
-    const burgerIcon = document.querySelector('#burger');
-    const navberMenu = document.querySelector('#nav-links');
+<div class="modal " id="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Share With</p>
+            <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            <!-- Content ... -->
+            {% if first_obj %}
+                {% if user_obj %}
+                    {% for i in user_obj %}
 
-    burgerIcon.addEventListener('click', () => {
-        navberMenu.classList.toggle('is-active');
-    });
-</script>
+                        <a href="{% url 'do_share_note' i.username first_obj.pk %}" class="panel-block">
+                    <span class="panel-icon">
+                      <i class="fas fa-user" aria-hidden="true"></i>
+                    </span>
+                            {{ i.get_full_name }}
+                        </a>
+                    {% endfor %}
+                {% else %}
+                    <a class="panel-block">You are the only person here</a>
+                {% endif %}
+            {% endif %}
+        </section>
+        <footer class="modal-card-foot">
+            {#            <button class="button is-success">Save changes</button>#}
+            {#            <button class="button">Cancel</button>#}
+        </footer>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="{% static 'javascript.js' %}"></script>
 </body>
 </html>
