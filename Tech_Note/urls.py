@@ -20,6 +20,7 @@ from django.contrib.auth import views as auth_views  # import this
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('web.urls')),
+    path('api/', include('api.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
 
     path('password_reset/done/',
