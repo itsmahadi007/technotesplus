@@ -22,7 +22,6 @@ Recommended OS ubuntu
  
   and 
   in another terminal with activated same venv run
-  
     celery -A Tech_Note.celery beat -l info
 
 
