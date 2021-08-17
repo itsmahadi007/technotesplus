@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.http import JsonResponse
 from web.models import Notes, SharedNotes
@@ -52,5 +53,6 @@ class Shared_with_me(APIView):
 
     def get(self, request):
         obj = SharedNotes.objects.filter(view_permit__username=request.user.username)
+
         serializer = SharedNotesSerializer(obj, many=True)
         return Response(serializer.data)

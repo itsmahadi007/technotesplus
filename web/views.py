@@ -13,8 +13,10 @@ from django.views import View
 from django.forms.models import model_to_dict
 from django.views.generic import ListView
 import json
+from .task import send_notifications
 
 # Create your views here.
+from django.conf import settings
 from web.models import Notes, SharedNotes
 
 
@@ -89,6 +91,32 @@ def do_register(request):
 
 @login_required(login_url='login_frm')
 def technote_frm(request):
+    # send_mail('subject', 'message', settings.EMAIL_HOST_USER, ['me.mahadi10@gmail.com'], fail_silently=True)
+    # try:
+    #
+    #     # send_mail('subject', 'message', 'example@mail.com', ['itsmahadi@gmail.com'], fail_silently=True)
+    #
+    #     time_thresold = datetime.datetime.now() - datetime.timedelta(hours=2)
+    #     # print(str(time_thresold))
+    #     shared_obj = SharedNotes.objects.filter(seen=False)
+    #
+    #     # for i in shared_obj:
+    #     #     print(i.note.title)
+    #
+    #     for i in shared_obj:
+    #         subject = 'You have an Unread Notes from' + i.note.user.get_full_name()
+    #         message = i.note.user.get_full_name() + ' has shared a note "' + i.note.title + '" with you'
+    #         email_form = 'exmple@email.com'
+    #         p = i.view_permit.first()
+    #         email_obj = User.objects.get(username=p)
+    #         # print(email_obj.email)
+    #         recipient_list = [email_obj.email]
+    #         print(message)
+    #         send_mail(subject, message, email_form, recipient_list, fail_silently=True)
+    #
+    # except Exception as e:
+    #     print(e)
+    send_notifications.delay()
     my_note_obj = Notes.objects.filter(user=request.user)
     user_list = User.objects.all().exclude(username=request.user.username)
 
@@ -138,23 +166,23 @@ def search_notes(request):
 
 @login_required(login_url='login_frm')
 def post_notes(request):
-    if request.method == 'POST':
-
-        title = request.POST['title']
-        content = request.POST['content']
-        if request.POST['note_id'] != "null":
-            note_id = int(request.POST['note_id'])
-            print(note_id)
-            if Notes.objects.filter(user=request.user, pk=note_id).exists():
-                con_obj = Notes.objects.get(user=request.user, pk=note_id)
-                con_obj.title = title
-                con_obj.content = content.lstrip()
-                con_obj.save()
-                return redirect('technote_frm')
-        else:
-            obj = Notes(title=title, content=content.lstrip(), user=request.user)
-            obj.save()
+    if request.method != 'POST':
+        return
+    title = request.POST['title']
+    content = request.POST['content']
+    if request.POST['note_id'] != "null":
+        note_id = int(request.POST['note_id'])
+        print(note_id)
+        if Notes.objects.filter(user=request.user, pk=note_id).exists():
+            con_obj = Notes.objects.get(user=request.user, pk=note_id)
+            con_obj.title = title
+            con_obj.content = content.lstrip()
+            con_obj.save()
             return redirect('technote_frm')
+    else:
+        obj = Notes(title=title, content=content.lstrip(), user=request.user)
+        obj.save()
+        return redirect('technote_frm')
 
 
 @login_required(login_url='login_frm')
@@ -224,6 +252,20 @@ def do_share_note(request, username, note_id):
         obj.save()
         obj.view_permit.add(user_obj)
         messages.success(request, "Shared " + note_obj.title + " with " + user_obj.get_full_name())
+
+        # shared_obj = SharedNotes.objects.filter(seen=False, created_at__gte=time_thresold)
+        subject = 'You have an Unread Notes from ' + user_obj.get_full_name()
+        message = user_obj.get_full_name() + ' has shared a note  with you'
+        email_form = 'exmple@email.com'
+
+        # print(email_obj.email)
+        recipient_list = [user_obj.email]
+        send_mail(subject, message, email_form, recipient_list)
+        # try:
+        #     send_mail(subject, email_form, 'admin@example.com', recipient_list, fail_silently=False)
+        # except BadHeaderError:
+        #     return HttpResponse('Invalid header found.')
+
         return redirect(technote_frm)
     except Exception as e:
         messages.error(request, e)

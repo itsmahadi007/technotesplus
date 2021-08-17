@@ -36,11 +36,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'web.apps.WebConfig',
+    'web',
     'crispy_forms',
     'api.apps.ApiConfig',
     'django_expiring_token',
     'rest_framework',
+    'django_celery_results',
+    'django_celery_beat',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -90,7 +92,7 @@ WSGI_APPLICATION = 'Tech_Note.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "tech_note",
+        "NAME": "t_n",
         "USER": "root",
         "PASSWORD": "",
         "HOST": "127.0.0.1",
@@ -156,12 +158,23 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'Great',
     # 50: 'critical',
 }
+# smtp settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'me.mahadi36@gmail.com'
+EMAIL_HOST_PASSWORD = 'pojeqzgxqfbavirj'
+DEFAULT_FROM_EMAIL = 'CELERY<me.mahadi36@gmail.com>'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
+# celery settings
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+# CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+CELERY_RESULT_BACKEND = 'django-db'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TASK_SELERLIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
+
+# CELERY BEAT
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
