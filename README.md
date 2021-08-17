@@ -8,12 +8,13 @@ Recommended OS ubuntu
     create venv:      python3 -m venv <any name for env>
     active(bash/zsh): source env/bin/activate
 
-2. Install requirment apps by using below commands 
-  sudo apt-get install redis
-  sudo apt-get install rabbitmq-server
-  sudo systemctl enable rabbitmq-server
-  sudo systemctl start rabbitmq-server
-  
+2. Install requirment apps by using below commands
+    
+    sudo apt-get install redis
+    sudo apt-get install rabbitmq-server
+    sudo systemctl enable rabbitmq-server
+    sudo systemctl start rabbitmq-server
+
 3. Install file from requiements.txt 
         pip3 install -r requirements.txt
   
