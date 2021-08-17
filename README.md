@@ -16,13 +16,12 @@ Recommended OS ubuntu
     sudo systemctl start rabbitmq-server
 
 3. Install file from requiements.txt 
-        pip3 install -r requirements.txt
+    pip3 install -r requirements.txt
   
 4. Run web the application by 
     python manage.py runserver
- 
-  and 
-  in another terminal with activated same venv run
+    and 
+    in another terminal with activated same venv run
     celery -A Tech_Note.celery beat -l info
 
 
