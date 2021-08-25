@@ -16,7 +16,6 @@ django-expiring-token==1.0.2
 django-timezone-field==4.2.1
 djangorestframework==3.12.4
 kombu==5.1.0
-#mysqlclient==2.0.3
 prompt-toolkit==3.0.19
 python-crontab==2.5.1
 python-dateutil==2.8.2

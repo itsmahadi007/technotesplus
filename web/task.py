@@ -20,7 +20,8 @@ def send_notification():
         for i in shared_obj:
             subject = 'You have an Unread Notes from' + i.note.user.get_full_name()
             message = i.note.user.get_full_name() + ' has shared a note "' + i.note.title + '" with you'
-            email_form = settings.EMAIL_HOST_USER
+            # email_form = settings.EMAIL_HOST_USER
+            email_form = 'exmple@email.com'
             p = i.view_permit.first()
             email_obj = User.objects.get(username=p)
             # print(email_obj.email)
@@ -46,7 +47,8 @@ def send_notifications(self):
             email_obj = User.objects.get(username=p)
             # print(email_obj.email)
             recipient_list = [email_obj.email]
-            #send_mail(subject, message, email_form, recipient_list, fail_silently=True)
+            print(i.note.title.title())
+            # send_mail(subject, message, email_form, recipient_list, fail_silently=True)
 
     except Exception as e:
         print(e)

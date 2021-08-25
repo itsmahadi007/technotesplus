@@ -29,11 +29,11 @@ app.autodiscover_tasks(lambda: [n.name for n in apps.get_app_configs()])
 app.conf.beat_schedule = {
     'add-every-2-hour': {
         'task': 'send_notification',
-        'schedule': crontab(minute='*/120')
+        'schedule': crontab(minute='*/2')
     }
 }
 
 
 @app.task(bind=True)
 def debug_task(self):
-    print(f'Request: {self.request!r}')
+    print('Request: {self.request!r}')

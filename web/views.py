@@ -251,12 +251,13 @@ def do_share_note(request, username, note_id):
         obj = SharedNotes(note=note_obj)
         obj.save()
         obj.view_permit.add(user_obj)
+
         messages.success(request, "Shared " + note_obj.title + " with " + user_obj.get_full_name())
 
         # shared_obj = SharedNotes.objects.filter(seen=False, created_at__gte=time_thresold)
-        subject = 'You have an Unread Notes from ' + user_obj.get_full_name()
-        message = user_obj.get_full_name() + ' has shared a note  with you'
-        email_form = 'exmple@email.com'
+        subject = 'You have an Unread Notes from ' + request.user.get_full_name()
+        message = request.user.get_full_name() + ' has shared a note  with you'
+        email_form = request.user.email
 
         # print(email_obj.email)
         recipient_list = [user_obj.email]
